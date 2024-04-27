@@ -1,0 +1,815 @@
+database - organized collection  of storing data...
+
+DBMS -> Database Management System --> communicate users and db
+
+types of DBMS : hierarchial, relational, network, distributed(multiple physical locations), object oriented db, cloud, graph db..
+
+login -> email and pwd
+messages -> email and messages
+account settings -> different from person to person
+
+
+SQL and Non-SqL data.. Open Source
+
+SQL(Structured Query Language) : Databases and Tables -> rows and columns : RDBMS -> structured
+  - MS Server, MySQL, SQL, postgresql, oracle etc
+NoSQL DB  : JSON -> Collections and Documents -> not structured, non-relational
+  - MongoDB, DynamoDB, Cassandra, MariaDB, IBM DB2 etc
+
+create, read/fetch/get/retrieve, update, delete : Basic operations.. 
+
+Installed MySQL Installer : https://dev.mysql.com/downloads/installer/
+
+under this -> workbench, shell(optional), server
+
+Create a database : create database schools(database Name);
+Backup your tables : Backup db tablename to disk filepath.. or right click on a table and select export wizard
+Drop you db : drop database user_management(database Name);
+
+Show your databases : show databases
+
+
+Create a table in particular db :
+
+
+Create table dbName.tableName ( 
+--(here my table name is student)
+	StudentId int,
+    FirstName nvarchar(255),
+    LastName nvarchar(255),
+    isCertified boolean
+)
+
+Create another table from existing table, select required columns:
+
+create table new_table_name AS
+ Select StudentId, FirstName
+ From student 
+ -- where StudentId is not null 
+
+ Where condition is optional
+
+show tables; -> will give you all the existing tables in your DB
+
+ Delete a table : 
+
+ 		drop table tableName : Table itself is deleted
+ 		truncate table tableName : Only data(values of rows and columns) will be deleted , table structure will not be effected.
+    Delete : 
+		delete from student; //delete all the rows..
+		delete from student where StudentId = 1; // deletes for rows which satisfy where condition	 
+
+Alter : 
+
+	Adding a column : 
+	
+	Alter table student
+	Add grades int; 
+
+	Delete a column :
+
+	Alter table student
+	drop column grades ; or drop grades;
+
+	Rename a column:
+
+		alter table student
+		rename column grades to marks;	
+
+	Add at particular place :
+
+	Alter table student
+	Add  marks int after LastName; or before isCertified
+
+	changing the column datatype :
+
+	Alter table student
+	modify column marks varchar(10);
+
+Insert Data into a table :
+
+Insert into student (StudentId,FirstName,LastName,marks,isCertified)
+values (1, "John", "Doe", 75, true);	
+
+
+Update :
+
+	 update student set isCertified = false // applies for whole table
+	 update student set isCertified = true where StudentId = 2; // updates for rows which satisfy where condition
+	 update student set isCertified = true, FirstName = "John" where StudentId = 2; update multiple columns
+
+Delete : 
+	delete from student; //delete all the rows..
+	delete from student where StudentId = 1; // deletes for rows which satisfy where condition	 
+
+
+Constraints: specify some rules for data in a table.. column level and table level
+
+	Not Null : A column can't have a null value
+	unique : emailId/phoneNumber/aadhar number
+  Primary Key -> Unique Key and it can't be null. A table will have only one primary key
+  Foreign Key --> Kind of creates links between two tables.. One table can have any number of foreign keys
+
+      Table Student -> StudentId is your primary key... Other columns : FirstName, LastName, 
+ 		  Marks, isCertified --> into this table TeacherId as a foreign Key
+			Table Teacher -> TeacherId is your primary key.. Other columns : TeacherName, 
+			Experience, Expertise, salary 
+
+			1 (TeacherID , Kamala -> 1 to 45 student IDs
+
+	Check : ensure your column has some data in it.	
+	Default : sets a default value to the column, if no value is specified
+	create index : for reading and creation operations, this will be quick operations..	
+	Auto increment : automatically adds and inserts the value , if not specified
+
+	Syntax for constraints :
+
+	Create table Teacher ( 
+	TeacherId AutoIncrement int Not null unique,
+	StudentId int not null,
+    TeacherName nvarchar(255),
+    experience int,
+    salary int Default (10000),
+    
+    Primary Key (TeacherId),
+    foreign key (StudentId) references student(StudentId),
+    Check (experience > 2)
+
+)
+
+Adding constraints to an existing table:
+
+Alter table student
+modify column StudentId int not null;
+
+Alter table student
+modify column StudentId int auto_increment;
+
+
+Like : 
+
+select * from student where FirstName like '%John%'
+
+select * from student where LastName like 'P_t__'
+
+select * from student where LastName like 'Pe%' and LastName like '%er'
+select * from student where LastName like 'Pe%' or LastName like '%er'
+select * from student where LastName like 'Peter' 
+
+Between:
+
+select * from student where StudentId between 3 and 6;
+select * from student where StudentId not between 3 and 6;
+
+select * from student where StudentId in (1,4,5)
+select * from student where StudentId not in (1,4,5)
+
+
+Operations : < , <= , > , >= , = , !=
+
+select * from student where studentId <= 4
+
+
+Bring multiple specific columns and you can do a temporary change of column names (Alias):
+
+select FirstName, LastName as SurName from student where StudentId not between 3 and 6;
+
+
+Count of rows:
+
+select count(*) from student;
+
+Distinct : Unique values in rows
+
+select count(distinct(FirstName)) from student;
+
+
+Extract from left or right in a column and bring the value
+
+
+select right(LastName, 2) as ExtractedLastName from student;
+
+select left(LastName, 2) as ExtractedLastName from student;
+
+Order By:
+
+Ascending order: Default;
+
+select * from student order by isCertified 
+    - incase of integer -> 0 to n
+    - incase of alphabet -> dictonary order
+
+Descending Order :
+
+select * from student order by FirstName Desc
+
+
+Top or limit:
+
+
+select  * from student limit 3
+select  * from student where isCertified = 1 limit 3;
+select  * from student order by FirstName Desc limit 3;
+
+Aggregate Functions:
+
+
+select min(Salary) from teacher;
+select max(Salary) from teacher;
+select sum(Salary) from teacher;
+select avg(Salary) from teacher;
+
+For teacher Kamala, I need both teacher details and students under her..
+
+bring data from my both tables where teacherId of student should be equal to the teacher Id of my teacher
+
+
+Join.. Inner, Left , Right , Outer join(cross/cartesian), self
+
+
+select stu.*, tea.TeacherName from student stu
+Inner join teacher tea on tea.TeacherId = stu.TeacherId
+
+
+select stu.*, tea.TeacherName from student stu
+join teacher tea on tea.StudentId = stu.StudentId
+
+
+union and union all;
+
+select TeacherId from student  union select TeacherName from teacher 
+select TeacherId from student  union all select TeacherName from teacher 
+
+
+select TeacherId from student  union all select TeacherName from teacher order by TeacherId
+
+Group By:
+
+select count(FirstName), isCertified from student group by isCertified;
+
+offset: skip certian rows, typically used with limit
+
+select * from student limit 3 offset 2;
+
+array -> [1,2,3,4,5,...10]
+
+search number 10.
+
+traditionally, looping and then seearch.. O(n) -> 10 times
+
+binary search -> sorted -> divide into two parts -> [1 to 5] & [6 to 10] -> one time
+[6 to 10] -> two parts, [6,7] [8, 9, 10] -> compare 10 with these parts -> divide -> 9,10 --> 4 times --> O(logn)
+
+create a index --> to speed up your read queries.. it follows binary search algorithm..
+
+create index indexName on tableName (columnName)
+
+create INDEX idx_firstName
+ON student (FirstName)
+
+to see all indices on table:
+
+show indexes from student;
+
+Delete an index:
+
+alter table tableName
+drop index index_Name;
+
+Alter table student
+drop index idx_lastName;
+
+select FirstName from student ; -> you get in a order, dictionary order
+
+clustered index (physical data) and non-clustered index (address of your physical data.. memory location..)
+
+
+cons: writing will be time consuming process.. distributed db..
+
+masted db.. no indices.. write ops... create/update/delete
+slave db.. all indices.. read ops..
+
+after particular period of time, both dbs will be synced..
+
+
+coalesce : check for nulls and give proper response
+
+select StudentId, coalesce(FirstName, LastName) as FullName from student ;
+
+
+Inner Query:
+
+select * from student where TeacherId not in (select TeacherId from Teacher) ;
+
+SP : Stored Procedure:
+
+CREATE PROCEDURE `SelectAllStudents` ()
+BEGIN
+Select * from student;
+END
+
+Inside sql work bench:
+
+USE `schools`;
+DROP procedure IF EXISTS `SelectAllStudents`;
+
+DELIMITER $$
+USE `schools`$$
+CREATE PROCEDURE `SelectAllStudents` ()
+BEGIN
+Select * from student;
+END$$
+
+DELIMITER ;
+
+Call SelectAllStudents();
+
+
+
+Connectivity from Java to DB:
+
+n methods ->n class ->n package -> application --> built and put it on a jar..
+just like .exe for application, .jar..
+
+
+https://dev.mysql.com/downloads/connector/j/ --> Add this jar to your build path
+
+        String query = "select * from student";
+
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/schools?user=root&password=Password!123");
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            System.out.println(resultSet.getInt(1) + " " + resultSet.getString(3) + " " + 
+                    resultSet.getBoolean(6));
+        }
+
+    }
+
+Maven: Build tool, add dependency in pom.xml.. Connecting from maven project..
+
+
+
+MONGO DB:
+
+No sql.. 
+
+employee, manager, admin, director.. if you need particular from a particular table.. join using your FK or PK..
+
+data -> JSON.. 
+{
+	"id" : 1,
+	"name" : "Oswald",
+	"eventsAttended" : ["catering", "swimming"]
+	"isCertified" : true
+}
+
+{
+	"id" : 1,
+	"name" : "roy"
+}
+
+tables --> Collections
+rows/column -> Documents
+column -> keys/fields
+
+Download mongoDb : community server: https://www.mongodb.com/try/download/shell
+
+https://robomongo.org/ or mongo compass
+
+
+To start your mongo server, open cmd and type mongosh
+
+default port: 27017
+
+show dbs; -> gives you all existing database
+
+use schools -> switch to schools db
+
+use schoolsNew -> if you don't have a db.. it will create a db.. orElse it uses existing db
+
+under same db -> db.dropDatabase();
+
+schoolsNew> db.dropDataBase();
+
+cls -> clears your screen
+
+schools> db.createCollection("students")
+show collections; -> existing collections will be displayed
+
+Delete a collection:
+
+ db.collectionName.drop(); -->  db.grades.drop();
+
+ CRUD Operations: create, read, update, delete..
+
+ Create -- Insert:
+
+db.students.insertOne({ name : "Peter", age : 15, dateOfJoining: Date(), certificates : 1})
+
+schools> db.students.insertMany([{ name : "Parker", age : 14, dateOfJoining: Date(), certificates : 2} , { name : "John", age : 17, certificates : 3}])
+
+Read : Find/search/get/retrieve:
+
+db.students.find() -> List of all records
+db.students.findOne() -> brings you top/first record
+db.students.find({name: 'Parker'}) -> where name = Parker..
+db.students.find( {name: 'Parker', age : 14}) --> where name = Parker and age =14
+db.students.find({}, {name: 'Parker'}) --> brings you all data along with particular field(s)
+db.students.find({}, {name: 'Parker', age : 14, _id:0}) --> when 0 -> it will not bring those ids (exclude ids)
+ {name: 'Parker', age : 15, _id:1}) -> when 1, it brings id.. (include ids)
+
+ 0 or 1 is applicable only for id.. not on other fields
+
+ db.students.find({}, {name: 'Parker', age : 15}) -> bring you all data
+
+Update:
+
+db.students.updateOne({certificates:2}, {$set: {age:16}})
+db.students.updateOne({certificates:2}, {$set:{name: "Jack", age: 15, lastModifiedDate:Date()}}) --> updates multiple fields, you can add a new field to an existing document, here we added Date field
+db.students.updateOne({certificates:4}, {$set:{name: "Jill", age: 15, Date:Date()}}, {upsert:true}) --> inserts data into your document if you don't have existing data with the where condition..
+db.students.updateMany({}, {$inc : {certificates : 1}}) --> for many records, increment operates adds a digit specified
+db.students.updateMany({name:"Parker"},{$currentDate:{LastModifiedDate:true, ModifiedDate:{$type:'date'}}}) 
+ db.students.updateMany({name:"Rama"},{$currentDate:{LastModifiedDate:true, ModifiedDate:{$type:'date'}}}, {upsert:true})
+
+- $rename : renames the field
+- $set : sets the value for fields, upsert:true
+- $unset : remove the field
+
+Array Elements Operations:
+
+$addToSet:
+
+db.students.updateMany({}, {$addToSet: {marks: {$each : [67, 98]}}}) -> based on where condition... it will add items
+db.students.updateMany({}, {$pop:{marks: -1}}) //remove the 0th or first Index
+db.students.updateMany({}, {$pop:{marks: 1}}) //remove the last index
+
+  Add again --> db.students.updateMany({}, {$addToSet: {marks: {$each : [77, 99]}}}) --> add at the last just like java
+
+db.students.updateMany({}, {$push: {marks: 83}}) --> elements get added at the last Index
+ db.students.updateMany({},{$push:{marks:{$each:[88], $position:1}}}) -> at a particular index
+ db.students.updateOne( { name:"Peter" }, { $pull: { marks: { $gt: 90 } } } ) 
+ db.students.updateOne( { name:"Peter" }, { $pullAll: { marks: [88] } } )		
+
+
+ Delete:
+
+db.students.deleteOne({name:"Parker"}) -> deletes first record , where condition satifies
+
+
+ db.students.deleteOne({}) -> The top or first document will be deleted
+ db.students.deleteMany({}) -> deletes all documents in a collection
+ db.students.deleteMany({name:"Parker"})
+
+ Exporting Data and Importing data through compass...
+
+
+ db.students.find({product_price : {$eq : 690}}), gt, gte, lt,lte,ne
+
+ db.students.find({arrayofProducts : {$in : ["apple", "banana"]}})
+ db.students.find({arrayofProducts : {$nin : ["apple", "banana"]}})
+
+ ExecutionStatastics : Stats -
+
+ db.students.find({certificates:3}).explain("executionStats") , docsExamined : 27..
+
+ Index:
+
+ db.students.createIndex({'certificates':1})
+
+ db.students.find({certificates:3}).explain("executionStats") -> docs examined are 1..
+
+ db.students.dropIndex("certificates_1") -> delete an index
+
+ Types of Indexes:
+
+		 Single Field Index (one field), 
+		 Compund Index (two or more fields : 1,-1), 
+		 multikey index (array), 
+		 text indexes (string objects), 
+		 wildcard index(few fields vary from document to document .$**), 
+		 hashed index ( :hashed), 
+		 geospatial indexes (geojson/legacy keyco-ordinates pairs, 2d sphere)
+
+
+Aggregate Functions	/ PipeLines / Operations	 :
+
+db.students.aggregate([{$match:{product_price: {$gt: 474}}}]) -> match all the documents where price is greater than 474
+
+db.students.aggregate([{$match:{product_price: {$gt: 474}}}, {$count: "totalQuantity"}]) --> gives the count of query in individual declared key
+
+db.students.aggregate([{$match:{product_price:474}}]) -> price is 474
+
+db.students.aggregate([{$match: {product_price : {$gt: 600}}},{$group : {_id:"$product_material"}}]) 
+
+db.students.aggregate([{$limit:n}]) -> bring top n documents
+
+db.students.aggregate(([{$match: {product_price : {$gt: 70}}},{$group : {_id:"$product_material", totalPrice:{$sum: {$multiply:["$product_price", "$quantity"]}}}}, {$sort: {totalPrice: -1}}, {$limit:5}, {$project: {"_id":0}}]))
+
+Join : self join or other collections join.. $lookup:
+
+
+db.students.aggregate([{$lookup:{from: "schools", localField: "_id", foreignField:"_id", as:"Details of the Product"}}])
+
+  {
+    $lookup: {
+      from: "schools",  // the collection to join with
+      localField: "_id",         // the field from the input documents
+      foreignField: "_id",       // the field from the documents of the "from" collection
+      as: "Details of the Product"  // the alias for the joined data
+    }
+
+Mapping you collection toArray() -> 
+
+store your query in a variable; var, const keyword in JS.. we have them in mongo
+
+var allStudentsCollection = db.find().toArray();
+allStudentsCollection.length -> length of your collection
+
+ var priceOperation = db.students.find().map(function(e){return e.product_price * 2}).toArray();
+
+ priceOperation -> result.. NaN means it's not a number
+
+ schools> priceOperation
+[
+  NaN, NaN, 1310, 1822, 1380, 984,
+   66, 948, 1000,  156,   56, 168,
+   52, 178,   74,  108,   86,  94,
+   72, 176,   92,   72,  180, 198,
+  190,  94,   40
+]
+
+For loop in mongo:
+
+ for(const myElement of priceOperation){print ("Product price is: " + myElement/2)}
+ 
+
+ Validate your schema:
+
+ db.createCollection("students", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["name", "year", "mobileNumber"],
+         properties: {
+            name: {
+               bsonType: "string",
+               description: "Must be a string and this is a required field"
+            },
+            year: {
+               bsonType: "int",
+               minimum: 2015,
+               maximum: 3000,
+               description: "Must be an integer. This is the date of birth year and should be > 2014 and < 3000"
+            },
+            mobileNumber: {
+               bsonType: "double"
+            },
+            address: {
+               bsonType: "string"
+            }
+         }
+      }
+   }, validationLevel:"error"
+})
+
+Connect Mongo to Java:
+
+dependency :    
+
+<!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync -->
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver-sync</artifactId>
+      <version>5.0.1</version>
+    </dependency>
+
+Class:
+
+   		MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase database = mongoClient.getDatabase("schools");
+        MongoCollection<Document> mongoCollection = database.getCollection("students");
+
+        FindIterable<Document> documents = mongoCollection.find();
+
+        documents.forEach(System.out::println); 
+
+
+MultiThreading In Java:
+
+thread -> main.. set of rules or instructions
+
+extends Thread class or implements Runnable interface-> Callable interface
+
+thread.start, sleep, interrrupt, set priority and yield, dead lock, synchronized keyword, join, pause, wait, etc
+
+React JS: alternative of JSP -> we will in servlets
+
+JSP -> Java Server Pages --> java plus html tags
+
+React -> like your jsp
+
+Vanila JS -> to create  simple h1
+
+   		const app = document.getElementById("app");
+      const header = document.createElement("h1");
+      const headerContent = document.createTextNode("Menu from script");
+
+      header.appendChild(headerContent);
+      app.appendChild(header);
+
+facebook developed react.js      
+
+React -> state and properties.. just like your extends classes and implements interface
+
+Spring Framework:
+
+backend (server/application)-> which runs 24*7..
+
+request (UI) -> backend (processes request) -> give you response..
+ 
+Java -> framework called Spring..
+
+main frames ., JSP (Java Server Page) + Servlets + JSF.. Java Enterprise Edition i.e., JAVA EE... difficult maintain & code..
+
+pros:
+
+less code
+configurations defined and managed by spring
+reduce boiler plate code -> you can have very simple logical changes or no change at all.. instead of redefining you can use the existing code
+
+throughout the app, this peiece of program repeats..
+
+public mathematicalOperations(anyVariable , balance){
+
+	**Bank Account**
+
+	// debit -> you have subtract numbers
+	// credits to your acc -> add your numbers
+	// some interest credited to savings acc -> 12% of your balance should be credited..
+	// loans
+}
+
+
+
+n number of coaches.. for different sports and for single sport you can have different coaches
+        
+objects are tightly coupled with your classes.. every obj is dependent on particular class
+
+LOOSE COUPLING -> declare an interface 
+
+
+Spring IOC and Spring DI --> Inversion of Control and Dependency Injection..
+
+object managed by spring -> bean
+
+IOC : Beans.. Bean LifeCycle.. object creation to destruction..
+DI -> inject dependencies of other classes for your respective beans..
+
+created a  application conext.xml ->
+
+pom.xml -> added spring-context depdendency
+
+        ClassPathXmlApplicationContext context = new
+                ClassPathXmlApplicationContext("applicationContext.xml");
+
+        Coach cricketCoach = context.getBean("myCricketCoach", Coach.class);
+        System.out.println(cricketCoach.getDailyWorkOut());
+
+        Coach footBallCoach = context.getBean("myFootBallCoach", Coach.class);
+        System.out.println(footBallCoach.getDailyWorkOut());
+
+  cricketCoach/footBallCoach --> wish service (happy wish service)      
+
+  	-- constructor
+  	-- getter and setter
+  
+
+  spring: 
+  
+   --	constructor Injection : <constructor-arg ref="myWish"> </constructor-arg>
+   -- getter and setter injection :         <property name="wishService" ref="myWish"/>
+   -- set your properties   <property name="email" value="${email}"/>, 
+       <context:property-placeholder location="application.properties"/>
+
+scope : singleton by default., prototype:
+    <bean id="myCricketCoach" class="com.spring.demo.CricketCoach" scope="prototype">
+
+Bean init, processing bean , destrcution: Bean Life cycle
+
+
+    <bean id="myCricketCoach" class="com.spring.demo.CricketCoach" 
+          init-method="startUpMethod" destroy-method="destroyMethod">
+
+          singleton -> started -> beans created -> destroyed
+          prototype -> Started bean and Started bean -> beans created
+
+To read/create beans in different packages ->
+    <context:component-scan base-package="com.spring"/>
+
+@Autowired : 
+	DI : 
+	 constructor level -> mandatory fields
+	 setter level -> not frequently used fields.. optional fields
+	 field/class level -> least priority..
+
+@Component
+@Scope
+@PostConstruct
+@PreDestroy
+@Configuration
+@ComponentScan
+@PropertySource
+@Qualifier-> two beans, to give preference you use this : constructor level, field level, setter level
+or @Primary
+
+third party jars:
+
+    @Bean
+    public WishService wishService(){
+        return  new HappyWishService();
+    }
+
+@Value("${email}") // to read properties from your application.properties
+private String email;
+
+
+27/04 -> spring mvc and spring boot, sample rest api creation
+
+spring mvc :
+
+java -> spring -> mvc : model, view, controller design pattern
+
+Request -> Dispatcher Servlet -> a class used to map the request to correct source controlle/model/views..
+
+	configuration manually(server)
+	specify dependencies separately
+	MVC & front ctrls
+	doesn't batch
+
+spring boot: built on top of spring mvc
+
+spring app + internal http server(tomcat/jetty) -xml config -> boot application: controller, service, repository, model, entity layers -> CRUD application -> creating, reading, updating, deleting operations on an object or class
+	REST APIS
+	dependencies will be wrapped as a single unit
+	db layer, service layer, ctrl layer, integration layer
+	supports batch
+
+
+@SpringBootApplication -> boot application === @Configuration + @EnableAutoConfiguration + @ComponentScan
+
+default -> tomcat server.. can you any other server? yes, in pom.xml you can mention the dependency of a server and bring that particular sever..
+
+lombok  -> @Data, @AllArgsConstructor, @NoArgsConstructor
+
+logging -> info, debug, error level
+
+
+    private static Log log = LogFactory.getLog(Student.class);
+
+    public static void main(String[] args) {
+        Student student = new Student();
+        student.setId(1);
+        log.info("Tomcat is running and you student id is : " + student.getId()); //set log levels
+    }
+
+API -> application program interface -> connect your request (UI) & response (backend)
+	  types based on sharing: private, public, composite, partner
+
+API -> endpoint.. address to your code/api
+	types of API : based on architecture - SOAP(XML)., REST(JSON,XML, text, html etc), Graph QL-2005 very recent(JSON)
+								 based on request -> POST, GET, UPDATE(PUT/PATCH), DELETE
+
+request -> application -> controller(define only req and response) -> service(business logic) -> repository(db calls)	
+
+http://localhost:8080/guvi/zen/next-steps
+
+/next-steps -> end-point
+guvi/zen -> req mapping
+8080 -> port
+http/https : protocol
+localhost : domain means where your app is running
+localhost:8080 -> base URL/URI
+
+Status code along with your API: 	gives information about your response fetched from API
+Universal Standardised Codes:
+
+Informational responses (100 – 199)
+Successful responses (200 – 299)
+Redirection messages (300 – 399)
+Client error responses (400 – 499)
+Server error responses (500 – 599)
+
+modify your response by creating a custom class.. ResponseHandler
+
+@RestController : @Contoller(@Component for bean creation) + @ResponseBody
+@PostMapping
+@GetMapping
+@PutMapping
+@DeleteMapping
+@PathVariable -> to read the parameter in url eg: http://localhost:8080/students/getStudent/2 (2 is path variable)
+@RequestBody -> to read complete object body
+
+postman -> tool
