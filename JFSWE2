@@ -813,3 +813,46 @@ modify your response by creating a custom class.. ResponseHandler
 @RequestBody -> to read complete object body
 
 postman -> tool
+
+28/04/24:
+
+create API, delete API, update API, search with query parameters url?id=1&firstName=Harry
+
+	- Path variable -{pathParam}
+	- query param - @RequestParam
+
+Swagger: API documentation, you can test your APIS..	
+
+	app.properties or app.yaml -> load confoguration to you applications...
+
+	swagger2 & swagger3
+
+Swagger 3:
+
+<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.5.0</version>
+</dependency>
+
+@OpenAPIDefinition -> customise your swagger look
+customising swagger at appication,controller, dto/schema level.
+
+Spring Hibernate  & JPA
+
+JPA -> Java persistence API ---> library -> hibernarte under JPA
+
+Mappings -> relation btwn tables..
+
+	one to one : one person has one govt id proof number(aadhar)
+	one to many : one person has many proofs(pan, aadhar, ration, gas etc)
+	many to one : many apples for a single person
+	many to many : apple.. many apples and many people will eat apples
+
+persontable ----> Order table
+
+one person can have multiple orders -> P-O : One to many
+O -> P : Many to One mapping., many orders can be assosciated with a single person..
+
+
