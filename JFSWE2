@@ -804,6 +804,7 @@ Server error responses (500 – 599)
 
 modify your response by creating a custom class.. ResponseHandler
 
+ResponseEntity
 @RestController : @Contoller(@Component for bean creation) + @ResponseBody
 @PostMapping
 @GetMapping
@@ -855,4 +856,48 @@ persontable ----> Order table
 one person can have multiple orders -> P-O : One to many
 O -> P : Many to One mapping., many orders can be assosciated with a single person..
 
+@Entitiy
+@Table
+@Id
+@column
+@Generatedvalue
+@OneToMany
+@ManytoOne
 
+04/05/2024 : spring JPA
+
+added app.props, added entity, added repo -> extends JPARepository, add service interface and impl class
+
+	controller -> service -> repository
+
+	spring is capable enough to check duplicate email entries, create tables if table doesn't exist
+
+	internally this uses hibernate
+
+	aop -> aspect oriented programming with spring -> introduce new interfaces and define new programming structure 	  	usage : logging framework/db translations
+
+	IOC : management of dependencies vs AOP -> cross-cutting concerns (improves performance) 
+
+Assignment :    Finish implementing get all users, get single user,update,delete APIs
+
+Spring data mongodb:
+
+
+dto/entity -> data transfer object -> ctrlr -> service -> repo
+@Document(collection = "product")
+
+
+locking -> I am adding data(10 new fields), you are retrieving data(10 new fields won't be displayed..) 10 new fields should be displayed -> acquire lock on db so that add ops will be successfully implemented and then your fetch ops will be started..same record/collection/table, if you are editing parallely -> lock will deny your request, my record is saved -> lock will be released -> you can do your opss
+
+
+Locking -> prevent parallel access of data..
+
+Strategies for locking -> Optimistic and Pessimistic locking
+
+Optimistic -> will check that transaction is not modified, if you have any modification.. rollback locking
+
+pessimistic -> on memory level, you acquire a  lock on object.. isolation levels.. transaction level lock.. roll back if lock is for specific time
+
+ACID principles, isolation levels at service layer (@Transactional(Isolation.READ_COMMITTED))., select for update to acquire a lock
+
+spring boot exception handling, actuator, validation of schemas
