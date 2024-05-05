@@ -882,13 +882,10 @@ Assignment :    Finish implementing get all users, get single user,update,delete
 
 Spring data mongodb:
 
-
 dto/entity -> data transfer object -> ctrlr -> service -> repo
 @Document(collection = "product")
 
-
 locking -> I am adding data(10 new fields), you are retrieving data(10 new fields won't be displayed..) 10 new fields should be displayed -> acquire lock on db so that add ops will be successfully implemented and then your fetch ops will be started..same record/collection/table, if you are editing parallely -> lock will deny your request, my record is saved -> lock will be released -> you can do your opss
-
 
 Locking -> prevent parallel access of data..
 
@@ -900,4 +897,68 @@ pessimistic -> on memory level, you acquire a  lock on object.. isolation levels
 
 ACID principles, isolation levels at service layer (@Transactional(Isolation.READ_COMMITTED))., select for update to acquire a lock
 
-spring boot exception handling, actuator, validation of schemas
+https://stackoverflow.com/questions/129329/optimistic-vs-pessimistic-locking
+
+microservices, spring boot exception handling, actuator, validation of schemas -> next topics
+
+05/04/24 :: Microservices: Spring Cloud
+
+monolithic -> single service apps...
+
+microservices -> amazon -> product search module, payment module
+
+[search], [payment] -> single application..
+	[search], [payment] ; [search], [payment]; [search], [payment] :: when you do search your payment is also loaded..
+search -> separately & payment separately
+
+ pros : easy to scale, maintain
+ 				if one service fails it doesn't effect other services
+ 				each MS(microservice) has unique function
+ 				easy to test/debug
+ 				diff technologies for diff services
+
+ microservice communication :: search and product, different application can use different technology to implement a module
+
+communication : search speak with payment & vice versa..
+				sync : search service will wait for the response of payment service
+				async : search service won't wait for the response of payment service and these are parallel operations 				
+apps -> both sql & no-sql dbs., or two types of sql dbs.. for eg: one service can run on sql db other service can run on MS SQL db or Oracle db or postgres sql db etc..
+ 	api -> ms1 -> sql, ms2 -> mongo, ... ms10 -> oracle
+
+
+search -> 8080 port : java app -> set of X API's
+payment -> runs on 9090 port : node.js application -> set of Y API's
+
+n ms run on n diff ports -> track -> API gateway
+ 
+ client (server) -> ms1, ms2 , ms3..
+
+ 						API gateway --> Euereka Server (register your ports here)
+
+ 			ms1 , ms2,  ms3 ..... msn -> fwds the request			
+
+
+ ms1 gives the result of two numbers added (a+b = 5)
+
+ ms2 is sending this a+b=5 to ms3...
+
+If ms2 fails, ms3 can't get a+b=5.. also ms1 can't give a+b =5 to ms2... 		
+ 		To avoid this circuit breaker pattern..
+
+
+Configuration of ms -> app.props -> config server.. 		
+
+one ms can have many instances->copy of your ms.. to track your instances * services register.. track for discovery..
+
+distributed tracing -> track your api calls & see what's happening inside it..
+
+cloud bus ->  kind of message broker -> applies all updated changes(app.properties) to the application 
+
+spring features + All the above + few additional features : Spring CLOUD :  https://spring.io/projects/spring-cloud
+
+Spring Mapping ::::
+
+	ctrlr -> USER(dbEntity) -> service -> repository -> user is passed through all the layers
+	ctrlr -> dto(only fields, no db schema) -> service (send dto from ctrl and map this dto to entity) send entity -> repository
+
+	either by manually mapping dto to entity and vice versa or using a Model Mapper
