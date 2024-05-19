@@ -962,3 +962,108 @@ Spring Mapping ::::
 	ctrlr -> dto(only fields, no db schema) -> service (send dto from ctrl and map this dto to entity) send entity -> repository
 
 	either by manually mapping dto to entity and vice versa or using a Model Mapper
+
+18/05/24:
+
+communication btwn microservices :
+		
+		- Rest Template
+		- Spring Cloud Openfeign libarary.
+		- webclient library
+
+SERVICE REGISTRY ::::::::: Discovery Server
+	
+	server ---> registers different clients		on app level : @EnableEurekaServer
+		Add dependency of spring-cloud-starter-netflix-eureka-server in service registry and spring-cloud-starter-netflix-eureka-client for clients	
+		in clients : eureka.instance.client.serverUrl.defaultZone=http://localhost:8761/Euereka
+
+Mvn commands...
+	
+	mvn clean -> deletes target folder
+	mvn install -> run all profiles of maven app
+	validate -> validates your app and check if eveything is fine..
+	compile -> check for compilation errors & generate a target
+	test -> check junit tests
+	package -> all above steps..
+
+
+Instances -> copy of same appliacation running at different places...
+	port 1 : 8080 -> 5 req
+	port 2 : 8082 -> 5 req	
+
+
+API Gateway : depending on user req, we will route the req to the ms.	
+
+		from spring initializr download the project & add in your workspace..
+
+		At app level --> @EnableEurekaClient
+
+
+	app.props : 
+		
+		eureka.instance.client.serverUrl.defaultZone=http://localhost:8761/eureka
+		management.endpoints.web.exposure.include=*
+
+		spring.cloud.gateway.routes[0].id=DEPARTMENT-SERVICE
+		spring.cloud.gateway.routes[0].uri=lb://DEPARTMENT-SERVICE
+		spring.cloud.gateway.routes[0].predicates[0]=Path=/api/departments/**
+
+		spring.cloud.gateway.routes[1].id=EMPLOYEE-SERVICE
+		spring.cloud.gateway.routes[1].uri=lb://EMPLOYEE-SERVICE
+		spring.cloud.gateway.routes[1].predicates[0]=Path=/api/employees/**	
+
+
+
+API GATE WAY registered ---> Service Registry <----	microservices as well registered....	
+
+	Route your req from api gateway to a particular ms...
+
+
+Config Server :
+	created a project with config-server dependency & in mservices add config-client dependency
+	created git hub repo and put the ms properties here
+	In config server : app. props make changes
+	app -> @EnableConfigServer
+	service-registry -> add reference of config server
+	for actuator -> add actuator dependency
+
+
+First Start servers -> config/eureka server then start instances api-gateway & ms
+
+If some changes in configuration i.e., properties change we have to restart your app, instead of that we have a message broker:
+To avoid the above scenario we have Spring Bus...
+
+Message Controller -> in all ms
+
+	@RefreshScope  // to enable dynamic(change) config properties reload
+
+Tools to broadcast msg -> rabbitmq, kafka, apache mq..
+
+	spring-cloud-starter-bus-amqp --> add dependency in ms
+
+RabbitMQ : install docker desktop:
+
+	in cmd : docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management	
+
+19/05/24 :
+
+distributed tracing : log4j /sl4j...
+	: data dog, relic --> paid tools
+	: zipkin/micrometer -> open source tools
+		- add 4 dependencies in api gateway, all micro services
+		- app.props where ever you added the dependencies
+		- run in docker command : docker run -d -p 9411:9411 openzipkin/zipkin
+
+
+emp service depends on -> dept service... & dept is down ===> 500 internal error		
+Circuit breaker -> add dependency , app.props
+	https://resilience4j.readme.io/docs/circuitbreaker -> fault isolation
+
+	retry -> transient faults
+
+*********************************************
+
+Exception handling & Validation in boot, Actuator conecepts.
+	
+	error handling : providing proper info to the user, why the request failed..
+		 - email already exists exception, fName/lName can't be null, resource not found exception..
