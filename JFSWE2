@@ -1116,10 +1116,58 @@ user_roles :
 
 AuthenticationFilter -> AuthenticationManager -> ProviderManager -> AuthenticationProvider -> DaoAuthenticationProvider -> UserDetailsService
 
-	--> through db, we saw how we connect our api's
+	--> through db, we saw how we hit our api's
 	-- in postman we are giving details -> which is unsecured..
 
 
-JWT -> JSON WEB TOKEN	--> hashed token , to authenticate your APIs...
+JWT -> JSON WEB TOKEN	--> hashed token , to authenticate your APIs..., from jwt.io -> you can decode your jwt..
 	- generate a token using your username and password
 	- in postman -> under Bearer Token put the token and hit api --> get api :: in case of all users & post api -> admin user
+
+
+spring batch, jms, reactive streams and web stack..	
+
+02/06/24 :
+
+Spring Batch.. bulk operations at some frequent intervals..
+	
+	use cases : 
+	          1. salary processing -> scheduled jobs -> every last working day of a month..
+	          2. emp transfers from comp A to other company B -> details of emp as csv file from A's db and share this csv to B -> B stores in their db. -> exporting data from db & sharing it across (mostly in csv - coma separated value)
+	          3. diff dbs -> export data from one db to other db/copy data --> migration of data.. etc
+
+	  comp X ->  export your details as csv(excel) from their db -> share to comp Y
+	  new comp Y ->  process this csv and store details of employee in their own db..      
+
+
+	Any batch proj : steps :
+			1. Reader     -> from csv it reads values
+			2. Processor  -> do logical processing ops
+			3. Writer     -> make sure data is gng to db --- writing data to db
+
+	through our demo application ->
+		1. written values into db by reading a csv file
+		2. once written using listener, we read from db and printed..
+			
+
+JMS : Java Messaging Service..
+
+ms --> communication : rest api's
+
+msg driven -> rabbit mq, active mq, kafka, apache mq.. queue..
+
+ms1 -> api call/msg driven -> configure our msg before ms2...
+
+ms1 -> msg -> ms2, ms3, ms4...	
+
+	one publisher -> one subscriber			
+	one publisher -> multiple subscribers.. One to Many relationship cmnctn.
+
+jms-sender & jms-receiver	
+
+1 msg at a time -> queue
+more than one msg -> topic..
+
+
+1 - 1 ---> queue
+1 -- many publishers --> topic
