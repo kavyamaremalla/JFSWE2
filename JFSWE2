@@ -1171,3 +1171,9 @@ more than one msg -> topic..
 
 1 - 1 ---> queue
 1 -- many publishers --> topic
+
+Full stack application overview :
+
+spring + UI (react)
+
+spring thymeleaf
