@@ -1176,4 +1176,84 @@ Full stack application overview :
 
 spring + UI (react)
 
-spring thymeleaf
+spring thymeleaf -> create a full stack app using spring boot
+
+Thymeleaf : substitute of JSP
+	Java template/framework
+	html/xml/css/js/xhtml/plain text
+	server side template(servlet + offline)
+	fast processing
+	logic -> DOM..
+
+Thymeleaf templates can be:
+	HTML (HTML5, XHTML 1.0/1.1, HTML 4)
+	XML.
+	TEXT (plain text)
+	JAVASCRIPT (. js files)
+	CSS (. css files)
+
+classes & packages -> coded
+
+	ctrlr -> 
+		thymeleaf -> iterate over list of employees & generate a dynamic content as per the user provided template
+
+unit testing : 
+
+TDD / BDD
+
+app -> each unit refers to each function. --> getEmployee or saveEmployee etc -> units..
+
+function add(a,b){
+	//logic
+	//calling other functionality called summation --> we assume this works as expected(dummy data or mock object)
+}
+
+test cases :  ways of testing a functionality
+
+	1. whole numbers
+	2. negative numbers
+	3. decimal numbers 
+	4. rational or irrational numbers etc
+
+
+	Actual vs Expected..
+
+	actual -> the o/p of your code through junit test
+	expected -> the logical expectation of your functionality..
+
+	assertions -> equal, not equal, true, false, null, not null -> o/p of your unit functionality i.e., actual
+
+
+	pom.xml -> junit depdendency/spring-boot-starter-junit/junit-jupiter-api and junit-jupiter-engine dependency
+
+	test -> create junit tests
+
+	test -> package (test) -> ClassNameTest
+
+	concatenate : i/p is 2 strings -- firstName & lastName
+		1. normal scenario : 2 strings & it should add the strings
+		2. empty strings
+		3. empty firstName
+		4. empty lastName
+		5. null as firstName
+		6. null as lastName
+		7. both null
+
+		Steps to write a test case :
+
+			1. initialize the req parameters to test
+			2. create mock objects
+			3. call the method which we are going to test
+			4. assert if actual results matches with the expected results
+
+r2dbc -> nativequery, indexed params, named params
+
+No test cases for : application, interfaces, dto, entities.. exclusions
+
+	Annotations : 
+		
+		@Test	, @BeforeAll, @BeforeEach (@Before for junit4), @AfterAll, @AfterEach,  @InjectMocks
+
+		Repository -> @DataJpaTest, 
+
+
