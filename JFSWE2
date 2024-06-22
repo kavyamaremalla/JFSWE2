@@ -1255,5 +1255,15 @@ No test cases for : application, interfaces, dto, entities.. exclusions
 		@Test	, @BeforeAll, @BeforeEach (@Before for junit4), @AfterAll, @AfterEach,  @InjectMocks
 
 		Repository -> @DataJpaTest, 
+		@Mock, @InjectMocks, @ExtendWith(MockitoExtension.class) // to initialize your mocks
+		@WebMvcTest
 
 
+		sonarqube -> sonar tool for testing coverage, by edfault jacoco plugin in intellij ide to test coverage.. junits covering each and every line of code, conditions of code..
+
+
+condition =>  a (&& or ||) b
+   							-> a true, b true
+   							-> a true, b false
+   							-> a false, b false
+   							-> a false, b true
