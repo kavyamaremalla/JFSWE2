@@ -1259,7 +1259,7 @@ No test cases for : application, interfaces, dto, entities.. exclusions
 		@WebMvcTest
 
 
-		sonarqube -> sonar tool for testing coverage, by edfault jacoco plugin in intellij ide to test coverage.. junits covering each and every line of code, conditions of code..
+		sonarqube -> sonar tool for testing coverage, by default jacoco plugin in intellij ide to test coverage.. junits covering each and every line of code, conditions of code..
 
 
 condition =>  a (&& or ||) b
@@ -1267,3 +1267,40 @@ condition =>  a (&& or ||) b
    							-> a true, b false
    							-> a false, b false
    							-> a false, b true
+
+23/06/24 : 
+
+Reactive Streams & WebFlux :   		
+
+API req -> thread(dispatcher servlet) -> Calls controller based on the url and availability of API..
+	200 API req -> default, you can modify this number of calls					
+
+	2000 threads in an app -> process some millions of records.. ----> An issue.. Blocking or synchronous model...
+		to solve -> reactive streams
+
+
+	API call -> event loop .. a thread which 24 *7.. like reload symbol..	
+
+	reactive stream :
+			API call -> event loop -> non-blocking -> process requests.. i.e., API calls
+
+- publisher : publish events -> db/api calls
+- subscriber : subscribe events -> ctrls... will listen to published events
+- subscription : to listen to subscriber
+
+
+All the Reactive Streams interaction in Spring Integration implemented with Project Reactor types, such as Mono and Flux.
+
+	Mono -> either 0 or single response
+	Flux -> any number of responses.. 0 to n
+	Tuple -> many types
+
+
+Spring reactive web -> netty server
+SQL -> spring data r2dbc
+
+Flow.java -> Java 9 -> Publisher, Subscriber , Subscription -> methods of each of the above				 
+
+Richardson Maturity Model -> mark apis, level 0 to level 3 , 3 is the highest
+
+server side events -> stream all employees for every 2 seconds
