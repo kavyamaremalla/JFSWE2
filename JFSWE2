@@ -1362,8 +1362,33 @@ Next : Merge Array, Quick Sort, Merge Sort
 
 time & space complexity...	
 
+time -> how long a program takes to give desired output
+	
+			--> linear -> O(n) 
+			--> binary -> O(log n) 
+			--> loop --> O(n)
+						loop inside a loop -> O(n) * O(n) -> square
+						loop outside a loop -> O(n) + O(n) -> O(2n) --> O(n)
+
+
+space -> how much memory it takes to compile & run the program
+		
+		--> linear --> O(1)
+		--> binary --> O(log n)
+
+
+	1 -> program with efficient time complexity	& non-efficient space complexity --> preferrable
+	2 -> program with efficient space complexity	& non-efficient time complexity
 
 
 Resume : 
 
-https://flowcv.com/
+https://flowcv.io/
+
+linked in profile -> try to n/w
+
+-> intro (can share your portfolio of projects)
+-> tech discussion -> core java, adv java, db, spring, junit, sonar, devops basics (jenkins), aws, dsa..project management ->jira,agile/waterfall methodologies.
+
+
+guvi -> finish tasks.., capstone & mini projects, assessment finally for placements, mock interviews.. raise a query in query portal or ask me in case doubts.. guvi codekata and webkata... you can practice when you have some time.
